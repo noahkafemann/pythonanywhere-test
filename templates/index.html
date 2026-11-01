@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+        <header class="mb-4 text-center">
+            <h1 class="display-5 fw-bold">Ideenmanager</h1>
+            <p class="text-muted">Deine Ideen, strukturiert festgehalten</p>
+        </header>
+
+        <section class="card mb-4">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Neue Idee hinzufügen</h2>
+                <form method="POST" action="{{ url_for('index') }}">
+                    <div class="mb-3">
+                        <label for="titel" class="form-label">Titel</label>
+                        <input type="text" class="form-control" id="titel" name="titel" required maxlength="100" placeholder="Kurzer, prägnanter Titel">
+                    </div>
+                    <div class="mb-3">
+                        <label for="beschreibung" class="form-label">Beschreibung</label>
+                        <textarea class="form-control" id="beschreibung" name="beschreibung" rows="4" required placeholder="Beschreibe deine Idee ausführlich..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Speichern</button>
+                </form>
+            </div>
+        </section>
+
+        <section>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Gespeicherte Ideen</h2>
+                <span class="badge bg-secondary">{{ ideen|length }}</span>
+            </div>
+
+            {% if ideen %}
+                <div class="list-group">
+                    {% for idee in ideen %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h3 class="h6 mb-1">{{ idee.titel }}</h3>
+                                <p class="mb-1 text-muted small">{{ idee.beschreibung }}</p>
+                                <small class="text-muted">ID: {{ idee.id }}</small>
+                            </div>
+                            <form method="POST" action="{{ url_for('loeschen', id=idee.id) }}" class="ms-3" onsubmit="return confirm('Diese Idee wirklich löschen?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Löschen</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5 text-muted">
+                    <p>Noch keine Ideen gespeichert. Füge deine erste Idee oben hinzu!</p>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+{% endblock %}
